@@ -10,8 +10,6 @@ var APIplate = function(options) {
     this.secret = this.options.secret;
     this.protocal = this.options.protocal || "http://";
     this.domain = this.options.domain || this.options.api;
-    this.cookiePrefix = this.options.cookiePrefix || "apisr_";
-
 
     this.middleware = function() {
         return function apiplate(req, res, next) {
@@ -30,6 +28,7 @@ var APIplate = function(options) {
                         res.redirect(url.format(Url), 303);
                         next();
                     }else{
+                        delete req.session.token;
                         console.log(err)
                         res.redirect(url.format(Url), 303);
                         //next();
@@ -111,7 +110,8 @@ var APIplateSession = function(plate, token) {
         });
     };
 };
-module.expprts.APIplateSession = APIplateSession;
+
+module.exports.APIplateSession = APIplateSession;
 module.exports.middleware = function(options) {
     return new APIplate(options).middleware();
 };
